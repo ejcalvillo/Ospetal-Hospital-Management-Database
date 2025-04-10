@@ -39,3 +39,63 @@ VALUES
   ("Sebastian","Hatfield","974-6978 Gravida St.","Sep 26, 1983");
   
   SELECT * FROM patients;
+
+
+  
+  
+  -- Makes Service Catalog table --
+  -- More efficent than singular  `services` table --
+CREATE TABLE IF NOT EXISTS `ServiceCatalogs`(
+	Service_Code INT AUTO_INCREMENT PRIMARY KEY,
+    Service_description VARCHAR(255) NOT NULL,
+    Service_Unit_Cost DECIMAL(10,2) NOT NULL
+);
+
+-- Inserts values into ServiceCatalog --
+INSERT INTO `ServiceCatalogs` (Service_Description, Service_Unit_Cost)
+VALUES
+    ('Blood Test', 25.00),
+    ('X-Ray', 150.00),
+    ('MRI Scan', 500.00),
+    ('CT Scan', 450.00),
+    ('IV Drip', 75.00),
+    ('Flu Shot', 40.00),
+    ('COVID-19 Test', 100.00),
+    ('Stitches', 80.00),
+    ('Wound Cleaning', 35.00),
+    ('Physical Therapy Session', 65.00),
+    ('Vaccination - Tetanus', 45.00),
+    ('Glucose Test', 30.00),
+    ('Ultrasound', 220.00),
+    ('Cholesterol Panel', 70.00),
+    ('Dental Cleaning', 110.00),
+    ('Vision Test', 25.00),
+    ('Skin Biopsy', 180.00),
+    ('EKG', 90.00),
+    ('Suture Removal', 50.00),
+    ('Hearing Test', 55.00),
+    ('Allergy Test', 120.00),
+    ('Nebulizer Treatment', 45.00),
+    ('Inhalation Therapy', 60.00),
+    ('Dermatology Consultation', 130.00),
+    ('Blood Pressure Monitoring', 20.00);
+
+  
+  
+-- Makes the service table --  
+CREATE TABLE `AppointmentServices` (
+    Service_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Appointment_ID INT,
+    Service_Code INT,
+    Service_Quantity INT DEFAULT 1,
+    TotalCost DECIMAL(10,2) GENERATED ALWAYS AS (
+        Service_Quantity * (
+            SELECT Service_Unit_Cost 
+            FROM ServiceCatalog 
+            WHERE ServiceCatalog.Service_Code = Service.Service_Code
+        )
+    ) STORED,
+    FOREIGN KEY (Appointment_ID) REFERENCES Appointment(Appointment_ID),
+    FOREIGN KEY (Service_Code) REFERENCES ServiceCatalog(Service_Code)
+);
+
