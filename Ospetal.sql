@@ -39,3 +39,110 @@ VALUES
   ("Sebastian","Hatfield","974-6978 Gravida St.","Sep 26, 1983");
   
   SELECT * FROM patients;
+
+
+  -- Department Table (Has Department ID and Name)
+  
+CREATE TABLE IF NOT EXISTS `department` (
+  `department_id` mediumint(8) unsigned NOT NULL auto_increment,
+  `department_name` varchar(255),
+  PRIMARY KEY (`department_id`)
+) AUTO_INCREMENT=1000;
+
+INSERT INTO `department` (`department_name`)
+VALUES
+("Emergency Department"),  
+("Intensive Care Unit"),  
+("Cardiology"),  
+("Neurology"),  
+("Oncology"),  
+("Nephrology"),  
+("Endocrinology"),  
+("Pulmonology"),  
+("Gastroenterology"),  
+("Rheumatology"),  
+("General Surgery"),  
+("Orthopedic Surgery"),  
+("Neurosurgery"),  
+("Cardiothoracic Surgery"),  
+("Plastic & Reconstructive Surgery"),  
+("Otolaryngology"),  
+("Obstetrics & Gynecology"),  
+("Pediatrics"),  
+("Neonatology"),  
+("Radiology"),  
+("Pathology"),  
+("Pharmacy"),  
+("Psychiatry"),  
+("Psychology"),  
+("Physical Therapy"),  
+("Occupational Therapy"),  
+("Dermatology"),  
+("Urology"),  
+("Hematology"),  
+("Infectious Diseases"),  
+("Anesthesiology"),  
+("Geriatrics"),  
+("Pain Management"),  
+("Sports Medicine"),  
+("Allergy & Immunology");
+
+SELECT * FROM department; 
+
+-- Table for Appointment
+CREATE TABLE IF NOT EXISTS `appointment` (
+  `appointment_id` mediumint(8) unsigned NOT NULL auto_increment,
+  `employee_id` mediumint(8) unsigned NOT NULL,
+  `patient_id` mediumint(8) unsigned NOT NULL,
+  `diagnosis` varchar(255),
+  `time` varchar(255) NOT NULL,
+  `date` varchar(255) NOT NULL,
+  PRIMARY KEY (`appointment_id`)
+  -- FOREIGN KEY(`employee_id`) REFERENCES employee(`employee_id`),
+  -- FOREIGN KEY(`patient_id`) REFERENCES patient(`patient_id`)
+) AUTO_INCREMENT=10000;
+
+INSERT INTO `appointment` (`employee_id`, `patient_id`, `diagnosis`, `time`, `date`)
+VALUES
+  (103, 12, 'Influenza', '11:23 AM', '07/15/2015'),
+  (107, 34, 'Lung Cancer', '02:30 PM', '05/20/2017'),
+  (112, 20, 'Migraine', '03:15 PM', '09/12/2016'),
+  (119, 25, 'Cold', '10:45 AM', '01/05/2021'),
+  (121, 9, 'High Blood Pressure', '08:25 AM', '03/18/2019'),
+  (127, 7, 'Diabetes', '12:10 PM', '08/23/2022'),
+  (106, 14, 'Asthma', '01:50 PM', '02/14/2020'),
+  (113, 22, 'Heart Disease', '09:00 AM', '11/01/2019'),
+  (124, 36, 'Flu', '02:00 PM', '04/30/2021'),
+  (128, 10, 'Anxiety', '11:23 AM', '06/19/2020'),
+  (105, 11, 'Cough', '02:30 PM', '10/07/2021'),
+  (110, 31, 'Cancer', '12:45 PM', '08/25/2020'),
+  (102, 1, 'Back Pain', '03:30 PM', '12/12/2022'),
+  (115, 16, 'Allergies', '04:05 PM', '05/09/2022'),
+  (120, 5, 'Hypertension', '08:20 AM', '11/22/2023'),
+  (101, 30, 'Inflammation', '07:55 AM', '04/18/2024'),
+  (118, 18, 'Liver Disease', '10:00 AM', '02/03/2023'),
+  (123, 45, 'Arthritis', '11:30 AM', '08/15/2021'),
+  (104, 28, 'Diabetes', '02:00 PM', '01/22/2024'),
+  (109, 48, 'Chronic Fatigue', '12:00 PM', '07/28/2024'),
+  (117, 13, 'Gastritis', '11:30 AM', '09/11/2024'),
+  (122, 6, 'Stress', '03:40 PM', '10/03/2022'),
+  (114, 24, 'Depression', '09:00 AM', '01/27/2025'),
+  (125, 50, 'Headache', '01:15 PM', '02/15/2025'),
+  (129, 2, 'Osteoporosis', '10:50 AM', '06/05/2024'),
+  (131, 19, 'Insomnia', '04:10 PM', '03/22/2024'),
+  (116, 33, 'Knee Pain', '02:20 PM', '11/30/2023'),
+  (130, 38, 'Skin Cancer', '11:45 AM', '04/08/2025'),
+  (108, 17, 'Severe Cold', '08:30 AM', '09/23/2023'),
+  (111, 8, 'Pneumonia', '01:30 PM', '12/10/2025'),
+  (126, 29, 'Anemia', '03:00 PM', '03/18/2023'),
+  (132, 39, 'Sore Throat', '07:40 AM', '06/27/2023'),
+  (103, 4, 'Kidney Disease', '01:00 PM', '07/14/2024'),
+  (127, 21, 'Cholesterol', '10:15 AM', '05/07/2025'),
+  (107, 44, 'Stroke', '12:25 PM', '02/12/2024'),
+  (124, 12, 'Leukemia', '03:15 PM', '10/04/2022'),
+  (110, 37, 'Severe Anxiety', '11:00 AM', '08/02/2024'),
+  (118, 40, 'Bronchitis', '02:05 PM', '12/01/2024');
+
+SELECT * FROM appointment;
+
+
