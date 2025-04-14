@@ -242,3 +242,9 @@ ORDER BY patient_id;
 
 DROP TABLE appointment;
 
+--4 Query that shows which lists diagnosis and patient_id in sorted order
+SELECT patient_id, diagnosis
+FROM appointment
+ORDER BY patient_id;
+
+--5 Query that shows 
