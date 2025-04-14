@@ -41,8 +41,6 @@ VALUES
   SELECT * FROM patients;
 
 
-  
-  
   -- Makes Service Catalog table --
   -- More efficent than singular  `services` table --
 CREATE TABLE IF NOT EXISTS `ServiceCatalogs`(
@@ -245,4 +243,8 @@ CREATE TABLE IF NOT EXISTS `Employees` (
     
     
     
+SELECT * FROM appointment
+ORDER BY patient_id;
+
+DROP TABLE appointment;
 
