@@ -120,13 +120,7 @@ VALUES
 ("Orthopedic Surgery"),  
 ("Neurosurgery"),  
 ("Cardiothoracic Surgery"),  
-("Plastic & Reconstructive Surgery"),  
-("Otolaryngology"),  
-("Obstetrics & Gynecology"),  
-("Pediatrics"),  
-("Neonatology"),  
-("Radiology"),  
-("Pathology");
+("Plastic & Reconstructive Surgery");
 
 SELECT * FROM department; 
 
@@ -145,26 +139,26 @@ CREATE TABLE IF NOT EXISTS `appointment` (
 
 INSERT INTO `appointment` (`employee_id`, `patient_id`, `diagnosis`, `time`, `date`)
 VALUES
-  (103, 12, 'Influenza', '11:23 AM', '07/15/2015'),
+  (118, 12, 'Influenza', '11:23 AM', '07/15/2015'),
   (107, 5, 'Lung Cancer', '02:30 PM', '05/20/2017'),
-  (112, 18, 'Migraine', '03:15 PM', '09/12/2016'),
-  (101, 3, 'Cold', '10:45 AM', '01/05/2021'),
-  (105, 10, 'High Blood Pressure', '08:25 AM', '03/18/2019'),
-  (119, 7, 'Diabetes', '12:10 PM', '08/23/2022'),
-  (106, 14, 'Asthma', '01:50 PM', '02/14/2020'),
-  (113, 22, 'Heart Disease', '09:00 AM', '11/01/2019'),
-  (108, 8, 'Flu', '02:00 PM', '04/30/2021'),
-  (104, 1, 'Anxiety', '11:23 AM', '06/19/2020'),
-  (109, 11, 'Cough', '02:30 PM', '10/07/2021'),
-  (110, 16, 'Cancer', '12:45 PM', '08/25/2020'),
-  (111, 12, 'Back Pain', '03:30 PM', '12/12/2022'),
-  (102, 13, 'Allergies', '04:05 PM', '05/09/2022'),
-  (114, 5, 'Hypertension', '08:20 AM', '11/22/2023'),
-  (115, 17, 'Inflammation', '07:55 AM', '04/18/2024'),
-  (116, 18, 'Liver Disease', '10:00 AM', '02/03/2023'),
-  (117, 24, 'Arthritis', '11:30 AM', '08/15/2021'),
-  (118, 9, 'Diabetes', '02:00 PM', '01/22/2024'),
-  (119, 19, 'Chronic Fatigue', '12:00 PM', '07/28/2024');
+  (116, 18, 'Migraine', '03:15 PM', '09/12/2016'),
+  (112, 3, 'Cold', '10:45 AM', '01/05/2021'),
+  (101, 10, 'High Blood Pressure', '08:25 AM', '03/18/2019'),
+  (120, 10, 'Diabetes', '12:10 PM', '08/23/2022'),
+  (107, 14, 'Asthma', '01:50 PM', '02/14/2020'),
+  (115, 22, 'Heart Disease', '09:00 AM', '11/01/2019'),
+  (104, 8, 'Flu', '02:00 PM', '04/30/2021'),
+  (109, 1, 'Anxiety', '11:23 AM', '06/19/2020'),
+  (104, 13, 'Cough', '02:30 PM', '10/07/2021'),
+  (109, 12, 'Back Pain', '03:30 PM', '12/12/2022'),
+  (114, 13, 'Allergies', '04:05 PM', '05/09/2022'),
+  (108, 5, 'Hypertension', '08:20 AM', '11/22/2023'),
+  (105, 17, 'Inflammation', '07:55 AM', '04/18/2024'),
+  (119, 2, 'Sinus Infection', '09:10 AM', '03/02/2020'),
+  (111, 4, 'Arthritis', '01:45 PM', '08/12/2021'),
+  (111, 19, 'Bronchitis', '10:05 AM', '10/10/2020'),
+  (119, 2, 'Strep Throat', '02:50 PM', '09/25/2023'),
+  (117, 15, 'Tonsillitis', '11:40 AM', '05/14/2022');
 
 SELECT * FROM appointment;
 
@@ -178,7 +172,7 @@ CREATE TABLE IF NOT EXISTS `Employees` (
   `Salary` FLOAT NOT NULL,
   PRIMARY KEY (`employee_ID`),
   FOREIGN KEY (department_id) REFERENCES (department_id)
-   -- FOREIGN KEY(`departmnet_ID`) REFERENCES employees(`employee_ID`)
+  FOREIGN KEY(`departmnet_ID`) REFERENCES employees(`employee_ID`)
 ) AUTO_INCREMENT=10000;
 
 	insert into `Employees`(`Employee_ID`, `Department_ID`, `email`, `hire_date`, `exist_date`,`salary`)
