@@ -40,16 +40,14 @@ VALUES
   
   SELECT * FROM patients;
 
-
-
 -- Department Table (Has Department ID and Name)
-CREATE TABLE IF NOT EXISTS `department` (
+CREATE TABLE IF NOT EXISTS `departments` (
   `department_id` mediumint(8) unsigned NOT NULL auto_increment,
   `department_name` varchar(255),
   PRIMARY KEY (`department_id`)
 ) AUTO_INCREMENT=1;
 
-INSERT INTO `department` (`department_name`)
+INSERT INTO `departments` (`department_name`)
 VALUES
 ("Emergency Department"),  
 ("Intensive Care Unit"),  
@@ -67,7 +65,7 @@ VALUES
 ("Cardiothoracic Surgery"),  
 ("Plastic & Reconstructive Surgery");
 
-SELECT * FROM department; 
+SELECT * FROM departments; 
 
 
 
@@ -81,7 +79,7 @@ create TABLE IF NOT EXISTS `Employees`(
   `exit_date` DATE,
   `Salary` FLOAT NOT NULL,
   PRIMARY KEY (`employee_ID`),
-  FOREIGN KEY (`Department_ID`) REFERENCES department(`department_id`)
+  FOREIGN KEY (`Department_ID`) REFERENCES departments(`department_id`)
 ) AUTO_INCREMENT=10000;
 
 INSERT INTO Employees
