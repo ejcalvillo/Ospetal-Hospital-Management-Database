@@ -2,7 +2,7 @@
 SELECT Employee_ID, Department_ID, first_name,Last_name,hire_date,exit_date,Salary
 FROM employees;
 
--- write e a query thats lists all the employees with a salary greater then 100,000 
+-- write a query thats lists all the employees with a salary greater then 100,000 
 SELECT Employee_ID,Departmnet_ID,First_name,Last_name,Salary
 from employees
 where salary > 100000;
