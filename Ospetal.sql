@@ -189,7 +189,6 @@ VALUES
 
 SELECT * FROM appointments;
 
-DROP TABLE IF EXISTS `Services`;
 -- Makes the service table --  
 CREATE TABLE `Services` (
     Service_ID INT AUTO_INCREMENT PRIMARY KEY,
@@ -223,8 +222,4 @@ VALUES
   (10018, 'Patient with Strep Throat: I recommend prompt administration of antibiotics as per current guidelines along with supportive measures such as hydration and rest to reduce symptom severity.', 70.00, 1),
   (10019, 'Patient with Tonsillitis: I advise evaluation for recurrent cases and a combination of antibiotic therapy with supportive care. In cases of chronic recurrence, surgical options may be discussed.', 115.00, 1);
   
-  SELECT * FROM Services
-
-
-
-
+  SELECT * FROM Services;
