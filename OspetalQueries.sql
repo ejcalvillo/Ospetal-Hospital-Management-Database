@@ -54,3 +54,61 @@ FROM
   patients
 JOIN 
   appointment ON patients.id = appointment.patient_id;
+
+ /* -----------------------------------------------------------------------------------
+  -- Query for Stored Procedure Calculating total service cost for an appointment --
+  -----------------------------------------------------------------------------------*/
+  DELIMITER $$
+CREATE PROCEDURE sp_CalcAppointmentCost(IN in_appointment_id MEDIUMINT(8) UNSIGNED)
+BEGIN
+  SELECT
+    s.appointment_ID  AS AppointmentID,
+    SUM(s.UnitCost * s.Quantity) AS TotalCost
+  FROM Services AS s
+  WHERE s.appointment_ID = in_appointment_id
+  GROUP BY s.appointment_ID;
+END$$
+DELIMITER ;
+-- Calculates or appointment number 10002 as an example --
+CALL sp_CalcAppointmentCost(10002);
+
+ /* -----------------------------------------------------------------------------------
+  -- 	Trigger to prevent employees from double booking same time and  date         --
+  -----------------------------------------------------------------------------------*/
+  DELIMITER $$
+CREATE TRIGGER trg_check_double_booking
+BEFORE INSERT ON appointments
+FOR EACH ROW
+BEGIN
+  DECLARE cnt INT;
+  SELECT COUNT(*) INTO cnt
+    FROM appointments
+   WHERE employee_id = NEW.employee_id
+     AND date        = NEW.date
+     AND time        = NEW.time;
+     
+  IF cnt > 0 THEN
+    SIGNAL SQLSTATE '45000'
+      SET MESSAGE_TEXT = 'Error: Employee already has an appointment at this date & time.';
+  END IF;
+END$$
+DELIMITER ;
+-- Testing trg_check_double_booking --
+INSERT INTO appointments
+  (employee_id, patient_id, diagnosis, time, date)
+VALUES
+  (101, 25, 'Test Booking', '10:00 AM', '2025-01-01');
+
+SELECT * 
+  FROM appointments
+ WHERE employee_id = 101
+   AND time        = '10:00 AM'
+   AND date        = '2025-01-01';
+   
+INSERT INTO appointments
+  (employee_id, patient_id, diagnosis, time, date)
+VALUES
+  (101, 25, 'Duplicate Booking', '10:00 AM', '2025-01-01');
+-- Testing works --
+
+
