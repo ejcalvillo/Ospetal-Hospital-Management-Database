@@ -189,7 +189,6 @@ VALUES
 
 SELECT * FROM appointments;
 
-DROP TABLE IF EXISTS `Services`;
 -- Makes the service table --  
 CREATE TABLE `Services` (
     Service_ID INT AUTO_INCREMENT PRIMARY KEY,
