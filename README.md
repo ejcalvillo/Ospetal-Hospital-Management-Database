@@ -38,7 +38,7 @@ appointments ⟷ services
 ## 👨‍💻 Authors
 
 - **Emir J. Calvillo** 
-
+- **Alexander Hernandez-Carney**
 ---
 
 ## 📝 License
