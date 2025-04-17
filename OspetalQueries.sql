@@ -36,30 +36,19 @@ from employees E
 join departments D
 on E.department_ID = D.department_ID;
 
--- Query that shows which lists diagnosis and patient_id in sorted order--
+-- READ: Query that shows which lists diagnosis and patient_id in sorted order--
 SELECT patient_id, diagnosis
 FROM appointments
 ORDER BY patient_id;
 
--- Query that shows patient's name and diagnosis --
-SELECT 
-  patients.first_name,
-  patients.last_name,
-  appointments.diagnosis
-FROM 
-  patients
-JOIN 
-  appointments ON patients.patient_id = appointments.patient_id;
+-- UPDATE: Query that updates a patient’s diagnosis for a specific appointment --
+UPDATE Appointments
+SET diagnosis = 'Hypertension (Updated)'
+WHERE appointment_id = 20017;
 
--- Query that shows the time patient was appointed into the hospital -- 
-SELECT 
-  patients.first_name,
-  patients.last_name,
-  appointments.time
-FROM 
-  patients
-JOIN 
-  appointments ON patients.patient_id = appointments.patient_id;
+-- DELETE – Query to remove a patient’s appointment -- 
+DELETE FROM Appointments
+WHERE appointment_id = 20017;
   
   /* -----------------------------------------------------------------------------------
   -- Query for listing all currently active employees --
