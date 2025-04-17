@@ -39,7 +39,7 @@ appointments ⟷ services
 
 - **Emir J. Calvillo** 
 - **Alexander Hernandez-Carney**
----
+- **Sneha Karki**
 
 ## 📝 License
 
