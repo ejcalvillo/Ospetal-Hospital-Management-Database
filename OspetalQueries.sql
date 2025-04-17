@@ -1,5 +1,17 @@
 USE ospetal;
 
+  /* -----------------------------------------------------------------------------------
+  -- CREATE (New patient and New appointment) --
+  -----------------------------------------------------------------------------------*/
+INSERT INTO patients (first_name, last_name, address, birthdate)
+VALUES ('Nina', 'Lopez', '123 Harmony Ln', 'Jan 10, 1995');
+
+INSERT INTO appointments (employee_id, patient_id, diagnosis, time, date)
+VALUES (101, 26, 'Sprained Ankle', '01:45 PM', '04/20/2025');
+
+ /* -----------------------------------------------------------------------------------
+  -- READ Queries --
+  -----------------------------------------------------------------------------------*/
 -- write a query that lits alls the employees in the table.
 SELECT Employee_ID, Department_ID, first_name,Last_name,hire_date,exit_date,Salary
 FROM employees;
@@ -105,6 +117,26 @@ GROUP BY p.patient_id, p.first_name, p.last_name
 HAVING appointment_count > 1
 ORDER BY appointment_count DESC;
   
+/* -----------------------------------------------------------------------------------
+  -- UPDATE (Updating Patient address and Salary for all employees in Department 1)--
+  -----------------------------------------------------------------------------------*/
+UPDATE patients
+SET address = '456 New Address Blvd'
+WHERE patient_id = 1;
+
+UPDATE employees
+SET Salary = Salary * 1.10
+WHERE Department_ID = 1;
+
+/* -----------------------------------------------------------------------------------
+  -- DELETE (Deleting a Patient) --
+  -----------------------------------------------------------------------------------*/
+DELETE FROM Services WHERE appointment_id IN (
+  SELECT appointment_id FROM appointments WHERE patient_id = 12
+);
+DELETE FROM appointments WHERE patient_id = 12;
+DELETE FROM patients WHERE patient_id = 12;
+
  /* -----------------------------------------------------------------------------------
   -- Query for Stored Procedure Calculating total service cost for an appointment --
   -----------------------------------------------------------------------------------*/
