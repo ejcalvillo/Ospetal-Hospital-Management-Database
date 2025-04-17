@@ -6,7 +6,9 @@ USE ospetal;
 -- Creating a new patient
 INSERT INTO patients (first_name, last_name, address, birthdate)
 VALUES ('Nina', 'Lopez', '123 Harmony Ln', 'Jan 10, 1995');
-
+--Creating New Patients_phones
+  insert into Patients_Phones (`Phone_number_ID`, `Patient_ID`, `Patient_Phone_number`)
+  values(31,131,'210-889-5566');
 -- Creating a new appointment
 INSERT INTO appointments (employee_id, patient_id, diagnosis, time, date)
 VALUES (101, 26, 'Sprained Ankle', '01:45 PM', '04/20/2025');
@@ -90,6 +92,10 @@ ON p.patient_id = a.patient_id
 GROUP BY p.patient_id, p.first_name, p.last_name
 HAVING appointment_count > 1
 ORDER BY appointment_count DESC;
+
+--Find the ID, then multiply it by 10
+ Select SUM(Phone_Number_ID *10)
+  from Patients_Phones;
   
 /* -----------------------------------------------------------------------------------
   -- UPDATE --
@@ -108,7 +114,14 @@ WHERE Department_ID = 1;
 UPDATE Appointments
 SET diagnosis = 'Hypertension (Updated)'
 WHERE appointment_id = 20017;
-
+--Update Patients_Phones to a new ID
+ update Patients_phones
+  set Phone_number_ID = '1', Patient_ID= '2'
+  where phone_number_ID = 2;
+  
+  update Patients_Phones
+  set Patient_Phone_Number='210-555-5584', Patient_ID= '3'
+  where Phone_number_ID=3;
 /* -----------------------------------------------------------------------------------
   -- DELETE --
   -----------------------------------------------------------------------------------*/
@@ -122,7 +135,9 @@ DELETE FROM patients WHERE patient_id = 12;
 -- DELETE – Query to remove a patient’s appointment -- 
 DELETE FROM Appointments
 WHERE appointment_id = 20017;
-
+--Delete-query to remove a Paitents number
+  Delete from Patients_Phones
+  where Paitent_Phone_number='210-856-9900';
  /* -----------------------------------------------------------------------------------
   -- Query for Stored Procedure Calculating total service cost for an appointment --
   -----------------------------------------------------------------------------------*/
