@@ -1,16 +1,18 @@
 USE ospetal;
 
   /* -----------------------------------------------------------------------------------
-  -- CREATE (New patient and New appointment) --
+  -- CREATE --
   -----------------------------------------------------------------------------------*/
+-- Creating a new patient
 INSERT INTO patients (first_name, last_name, address, birthdate)
 VALUES ('Nina', 'Lopez', '123 Harmony Ln', 'Jan 10, 1995');
 
+-- Creating a new appointment
 INSERT INTO appointments (employee_id, patient_id, diagnosis, time, date)
 VALUES (101, 26, 'Sprained Ankle', '01:45 PM', '04/20/2025');
 
  /* -----------------------------------------------------------------------------------
-  -- READ Queries --
+  -- READ --
   -----------------------------------------------------------------------------------*/
 -- write a query that lits alls the employees in the table.
 SELECT Employee_ID, Department_ID, first_name,Last_name,hire_date,exit_date,Salary
@@ -41,18 +43,7 @@ SELECT patient_id, diagnosis
 FROM appointments
 ORDER BY patient_id;
 
--- UPDATE: Query that updates a patient’s diagnosis for a specific appointment --
-UPDATE Appointments
-SET diagnosis = 'Hypertension (Updated)'
-WHERE appointment_id = 20017;
-
--- DELETE – Query to remove a patient’s appointment -- 
-DELETE FROM Appointments
-WHERE appointment_id = 20017;
-  
-  /* -----------------------------------------------------------------------------------
-  -- Query for listing all currently active employees --
-  -----------------------------------------------------------------------------------*/
+-- Query for listing all currently active employees --
 SELECT
 	EMPLOYEE_ID,
     first_name,
@@ -61,9 +52,7 @@ SELECT
 FROM Employees
 WHERE exit_date IS NULL;
 
-/* -----------------------------------------------------------------------------------
-  -- Query for listing appointments with patient and doctor names --
-  -----------------------------------------------------------------------------------*/
+-- Query for listing appointments with patient and doctor names --
   SELECT 
 	  a.appointment_id,
 	  p.first_name AS patient_first_name,
@@ -79,9 +68,7 @@ ON a.patient_id = p.patient_id
 JOIN Employees AS e 
 ON a.employee_id = e.employee_id;
 
-/* -----------------------------------------------------------------------------------
-  -- Query for listing all departments and number of employees in each --
-  -----------------------------------------------------------------------------------*/
+-- Query for listing all departments and number of employees in each --
 SELECT 
   d.department_name,
   COUNT(e.Employee_ID) AS number_of_employees
@@ -91,9 +78,7 @@ ON d.department_id = e.Department_ID
 GROUP BY d.department_name
 ORDER BY number_of_employees DESC;
 
-/* -----------------------------------------------------------------------------------
-  -- Query for listing patients who had more than one appointment --
-  -----------------------------------------------------------------------------------*/
+-- Query for listing patients who had more than one appointment --
 SELECT 
   p.patient_id,
   p.first_name,
@@ -107,24 +92,36 @@ HAVING appointment_count > 1
 ORDER BY appointment_count DESC;
   
 /* -----------------------------------------------------------------------------------
-  -- UPDATE (Updating Patient address and Salary for all employees in Department 1)--
+  -- UPDATE --
   -----------------------------------------------------------------------------------*/
+-- Updating Patient address
 UPDATE patients
 SET address = '456 New Address Blvd'
 WHERE patient_id = 1;
 
+-- Updating salary for all employees in Department 1
 UPDATE employees
 SET Salary = Salary * 1.10
 WHERE Department_ID = 1;
 
+-- UPDATE: Query that updates a patient’s diagnosis for a specific appointment --
+UPDATE Appointments
+SET diagnosis = 'Hypertension (Updated)'
+WHERE appointment_id = 20017;
+
 /* -----------------------------------------------------------------------------------
-  -- DELETE (Deleting a Patient) --
+  -- DELETE --
   -----------------------------------------------------------------------------------*/
+-- Completely deleting all patient information
 DELETE FROM Services WHERE appointment_id IN (
   SELECT appointment_id FROM appointments WHERE patient_id = 12
 );
 DELETE FROM appointments WHERE patient_id = 12;
 DELETE FROM patients WHERE patient_id = 12;
+
+-- DELETE – Query to remove a patient’s appointment -- 
+DELETE FROM Appointments
+WHERE appointment_id = 20017;
 
  /* -----------------------------------------------------------------------------------
   -- Query for Stored Procedure Calculating total service cost for an appointment --
