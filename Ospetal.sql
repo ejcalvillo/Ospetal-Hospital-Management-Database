@@ -160,7 +160,91 @@ CREATE TABLE IF NOT EXISTS `appointments` (
   FOREIGN KEY(`employee_id`) REFERENCES Employees(`employee_id`),
   FOREIGN KEY(`patient_id`) REFERENCES patients(`patient_id`)
 ) AUTO_INCREMENT=10000;
+create table Employees_phones(
+`Phone_Number_ID` int not null,
+`employee_ID` int not null,
+`Employee_Phone_number` varchar(20) DEFAULT null,
+primary key(`Phone_Number`),
+foreign key (employee_ID) references employees(employee_ID)
+);
 
+INSERT INTO `employees_phones` (`Phone_number_ID`, `Employee_ID`, `Employee_Phone_number`)
+VALUES
+  (1, 101, '210-1155-1178'),
+  (2, 102, '210-889-4422'),
+  (3, 103, '210-223-3322'),
+  (4, 104, '210-855-9955'),
+  (5, 105, '210-666-8899'),
+  (6, 106, '210-556-9999'),
+  (7, 107, '210-456-2233'),
+  (8, 108, '210-556-8552'),
+  (9, 109, '210-897-8899'),
+  (10, 110, '210-465-7889'),
+  (11, 111, '210-336-4478'),
+  (12, 112, '210-556-7788'),
+  (13, 113, '210-556-4487'),
+  (14, 114, '210-445-4457'),
+  (15, 115, '210-789-4567'),
+  (16, 116, '210-785-7823'),
+  (17, 117, '210-789-4563'),
+  (18, 118, '210-458-1457'),
+  (19, 119, '210-458-1236'),
+  (20, 120, '210-126-1245'),
+  (21,121, '210-567-2567'),
+  (22,122, '210-254-2678'),
+  (23,123, '210-458-8964'),
+  (24,124, '210-256-4589'),
+  (25,125, '210-456-7896'),
+  (26,126, '210-568-7854'),
+  (27,127, '210-363-4123'),
+  (28,128, '210-345-4587'),
+  (29,129, '210-789-4589'),
+  (30,130, '210-896-8912');
+  
+  select *from Employees_Phones;
+  
+  create table Patients_Phones(
+`Phone_Number_ID` int not null,
+`Patient_ID` int not null,
+`Patient_Phone_number` varchar(20) DEFAULT null,
+primary key(`Phone_Number`),
+foreign key (employee_ID) references employees(employee_ID)
+);
+
+INSERT INTO `Patients_phones` (`Phone_number_ID`, `Patient_ID`, `Patient_Phone_number`)
+VALUES
+  (1, 101, '210-555-3890'),
+  (2, 102, '210-555-4099'),
+  (3, 103, '210-555-5584'),
+  (4, 104, '210-458,2296'),
+  (5, 105, '210-888-9985'),
+  (6, 106, '210-899-2244'),
+  (7, 107, '210-111-1155'),
+  (8, 108, '210-222-6000'),
+  (9, 109, '210-205-0055'),
+  (10, 110, '210-066-0598'),
+  (11, 111, '210-101-0236'),
+  (12, 112, '210-660-4499'),
+  (13, 113, '210-998-7045'),
+  (14, 114, '210-780-0444'),
+  (15, 115, '210-809-5600'),
+  (16, 116, '210-789-9999'),
+  (17, 117, '210-645-6655'),
+  (18, 118, '210-333-4433'),
+  (19, 119, '210-231-1234'),
+  (20, 120, '210-166-3366'),
+  (21,121, '210-678-6895'),
+  (22,122, '210-133-1344'),
+  (23,123, '210-233-9988'),
+  (24,124, '210-333-8956'),
+  (25,125, '210-445-8933'),
+  (26,126, '210-236-6987'),
+  (27,127, '210-393-7894'),
+  (28,128, '210-454-7894'),
+  (29,129, '210-894-5456'),
+  (30,130, '210-856-9900');
+  
+  select *from Patients_Phones;
 INSERT INTO `appointments` (`employee_id`, `patient_id`, `diagnosis`, `time`, `date`)
 VALUES
   (101, 12, 'Influenza', '11:23 AM', '07/15/2015'),
