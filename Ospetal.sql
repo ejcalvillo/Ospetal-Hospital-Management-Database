@@ -160,6 +160,7 @@ CREATE TABLE IF NOT EXISTS `appointments` (
   FOREIGN KEY(`employee_id`) REFERENCES Employees(`employee_id`),
   FOREIGN KEY(`patient_id`) REFERENCES patients(`patient_id`)
 ) AUTO_INCREMENT=10000;
+
 create table Employees_phones(
 `Phone_Number_ID` int not null,
 `employee_ID` int not null,
@@ -305,3 +306,4 @@ VALUES
   (10019, 'Patient with Tonsillitis: I advise evaluation for recurrent cases and a combination of antibiotic therapy with supportive care. In cases of chronic recurrence, surgical options may be discussed.', 115.00, 1);
   
   SELECT * FROM Services;
+

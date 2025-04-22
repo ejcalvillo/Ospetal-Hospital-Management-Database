@@ -6,7 +6,7 @@ USE ospetal;
 -- Creating a new patient
 INSERT INTO patients (first_name, last_name, address, birthdate)
 VALUES ('Nina', 'Lopez', '123 Harmony Ln', 'Jan 10, 1995');
---Creating New Patients_phones
+-- Creating New Patients_phones
   insert into Patients_Phones (`Phone_number_ID`, `Patient_ID`, `Patient_Phone_number`)
   values(31,131,'210-889-5566');
 -- Creating a new appointment
@@ -93,7 +93,7 @@ GROUP BY p.patient_id, p.first_name, p.last_name
 HAVING appointment_count > 1
 ORDER BY appointment_count DESC;
 
---Find the ID, then multiply it by 10
+-- Find the ID, then multiply it by 10
  Select SUM(Phone_Number_ID *10)
   from Patients_Phones;
   
@@ -114,7 +114,7 @@ WHERE Department_ID = 1;
 UPDATE Appointments
 SET diagnosis = 'Hypertension (Updated)'
 WHERE appointment_id = 20017;
---Update Patients_Phones to a new ID
+-- Update Patients_Phones to a new ID
  update Patients_phones
   set Phone_number_ID = '1', Patient_ID= '2'
   where phone_number_ID = 2;
@@ -135,7 +135,7 @@ DELETE FROM patients WHERE patient_id = 12;
 -- DELETE – Query to remove a patient’s appointment -- 
 DELETE FROM Appointments
 WHERE appointment_id = 20017;
---Delete-query to remove a Paitents number
+-- Delete-query to remove a Paitents number
   Delete from Patients_Phones
   where Paitent_Phone_number='210-856-9900';
  /* -----------------------------------------------------------------------------------
