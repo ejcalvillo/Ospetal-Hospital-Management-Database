@@ -86,6 +86,12 @@ class App:
         self.patients_cb.bind("<<ComboboxSelected>>", self.load_appointments_for_patient)
 
 
+        #-- Adding a new patient --
+        ttk.Button(root, text="➕ Add Patient", command=self.open_add_patient_window)\
+            .grid(row=0, column=2, padx=5)
+
+
+
 
         # --- Edit Diagnosis Entry ---
         ttk.Label(root, text="New Diagnosis:").grid(row=12, column=0, sticky="w")
@@ -248,6 +254,49 @@ class App:
             messagebox.showinfo("Invoice", f"Invoice created for ${total:.2f}")
         except mysql.connector.Error as err:
             return messagebox.showerror("SQL Error", f"Error: {err}")
+    
+    def open_add_patient_window(self):
+        win = tk.Toplevel()
+        win.title("Add New Patient")
+        win.geometry("300x250")
+
+        # Labels and entries
+        ttk.Label(win, text="First Name:").pack(pady=5)
+        first_entry = ttk.Entry(win)
+        first_entry.pack()
+
+        ttk.Label(win, text="Last Name:").pack(pady=5)
+        last_entry = ttk.Entry(win)
+        last_entry.pack()
+
+        ttk.Label(win, text="Birthdate (YYYY-MM-DD):").pack(pady=5)
+        birth_entry = ttk.Entry(win)
+        birth_entry.pack()
+
+        ttk.Label(win, text="Address:").pack(pady=5)
+        address_entry = ttk.Entry(win)
+        address_entry.pack()
+
+        def submit():
+            first = first_entry.get().strip()
+            last = last_entry.get().strip()
+            birth = birth_entry.get().strip()
+            address = address_entry.get().strip()
+
+            if not first or not last or not birth:
+                return messagebox.showerror("Error", "First, Last, and Birthdate are required.")
+
+            self.cur.execute(
+                "INSERT INTO patients (first_name, last_name, birthdate, address) VALUES (%s, %s, %s, %s)",
+                (first, last, birth, address)
+            )
+            self.conn.commit()
+            self.load_patients()  # refresh dropdown
+            messagebox.showinfo("Success", f"{first} {last} added!")
+            win.destroy()
+
+        ttk.Button(win, text="Add Patient", command=submit).pack(pady=10)
+
 
 
 
