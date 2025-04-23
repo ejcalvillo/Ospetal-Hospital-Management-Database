@@ -307,3 +307,12 @@ VALUES
   
   SELECT * FROM Services;
 
+CREATE TABLE Invoices (
+    Invoice_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Appointment_ID MEDIUMINT(8) UNSIGNED NOT NULL UNIQUE,
+    Total_Amount DECIMAL(10,2) NOT NULL,
+    Status ENUM('Unpaid', 'Paid', 'Pending') DEFAULT 'Unpaid',
+    Issued_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (Appointment_ID) REFERENCES appointments(appointment_id)
+);
+
