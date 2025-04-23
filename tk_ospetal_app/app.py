@@ -3,6 +3,7 @@ from tkinter import ttk, messagebox
 from tkcalendar import DateEntry
 import mysql.connector
 from config import DB_CONFIG
+from pdf_viewer import export_invoice_pdf
 
 class App:
     def __init__(self, root):
@@ -69,6 +70,13 @@ class App:
             self.appt_tree.heading(col, text=col.capitalize())
             self.appt_tree.column(col, width=100)
         self.appt_tree.grid(row=6, column=0, columnspan=2, sticky="nsew")
+
+        #-- Invoice Button ---
+        ttk.Button(root, text="Generate Invoice", command=self.generate_invoice)\
+            .grid(row=14, column=0, columnspan=2, pady=5)
+        
+        ttk.Button(root, text="Export Invoice to PDF", command=lambda: export_invoice_pdf(self))\
+            .grid(row=15, column=0, columnspan=2, pady=5)
         
         
         #-- Binding selection for an appointment --
@@ -212,6 +220,35 @@ class App:
         item = self.appt_tree.item(selected[0])
         self.current_appointment_id = item["values"][0]
         print(f"Selected appointment ID: {self.current_appointment_id}")
+
+    #-- Logic for generating invoice --
+    def generate_invoice(self):
+        if not self.current_appointment_id:
+            return messagebox.showerror("Error", "Select or create an appointment first.")
+
+        # Get the total from the stored procedure
+        self.cur.callproc('sp_CalcAppointmentCost', (self.current_appointment_id,))
+        total = 0.0
+        for result in self.cur.stored_results():
+            row = result.fetchone()
+            if row and 'TotalCost' in row:
+                total = row['TotalCost']
+
+        if total == 0.0:
+            return messagebox.showerror("Error", "Cannot generate invoice for $0.00 total.")
+
+        # Insert into invoice table
+        sql = """
+            INSERT INTO Invoices (Appointment_ID, Total_Amount)
+            VALUES (%s, %s)
+        """
+        try:
+            self.cur.execute(sql, (self.current_appointment_id, total))
+            self.conn.commit()
+            messagebox.showinfo("Invoice", f"Invoice created for ${total:.2f}")
+        except mysql.connector.Error as err:
+            return messagebox.showerror("SQL Error", f"Error: {err}")
+
 
 
 
