@@ -9,100 +9,122 @@ class App:
     def __init__(self, root):
         # --- DB Connection ---
         self.conn = mysql.connector.connect(**DB_CONFIG)
-        self.cur  = self.conn.cursor(dictionary=True)
+        self.cur = self.conn.cursor(dictionary=True)
 
-        # --- Main Window ---
+        # --- Main Window Setup ---
         root.title("OSPETAL")
-        root.geometry("600x400")
+        root.geometry("1600x1000")
+        root.configure(bg="#AEC6CF")  # Soft blue background
 
-        # --- Patient Selector ---
-        ttk.Label(root, text="Patient:").grid(row=0, column=0, sticky="w")
-        self.patients_cb = ttk.Combobox(root, state="readonly")
-        self.patients_cb.grid(row=0, column=1, sticky="ew")
+        style = ttk.Style()
+        style.theme_use("clam")
+
+        # --- Unified LabelFrame Style (Mint Clean) ---
+        mint_bg = "#E0F7F4"
+        text_color = "#004D40"
+
+        style.configure("Unified.TLabelframe", background=mint_bg)
+        style.configure("Unified.TLabelframe.Label", background=mint_bg, foreground=text_color, font=("Segoe UI", 11, "bold"))
+        style.configure("Unified.TLabel", background=mint_bg, foreground=text_color, font=("Segoe UI", 10))
+
+        # --- Appointment Section ---
+        appt_frame = ttk.LabelFrame(root, text="Book Appointments", style="Unified.TLabelframe")
+        appt_frame.grid(row=0, column=0, columnspan=3, sticky="ew", padx=10, pady=10)
+        appt_frame.grid_columnconfigure(1, weight=1)
+
+        ttk.Label(appt_frame, text="Patient:", style="Unified.TLabel").grid(row=0, column=0, sticky="w", padx=5, pady=5)
+        self.patients_cb = ttk.Combobox(appt_frame, state="readonly")
+        self.patients_cb.grid(row=0, column=1, columnspan=2, sticky="ew", padx=5, pady=5)
         self.load_patients()
 
-        # --- Book Appointment Button ---
-        ttk.Button(root, text="Book Appointment", command=self.book_appointment)\
-            .grid(row=4, column=0, columnspan=2, pady=5)
+        ttk.Label(appt_frame, text="Reason for being seen:", style="Unified.TLabel").grid(row=1, column=0, sticky="w", padx=5, pady=5)
+        self.diagnosis_entry = ttk.Entry(appt_frame)
+        self.diagnosis_entry.grid(row=1, column=1, columnspan=2, sticky="ew", padx=5, pady=5)
 
-        # --- Appointment Date ---
-        ttk.Label(root, text="Date (YYYY-MM-DD):").grid(row=2, column=0, sticky="w")
-        self.date_entry = ttk.Entry(root)
-        self.date_entry.grid(row=2, column=1, sticky="ew")
+        ttk.Label(appt_frame, text="Date (YYYY-MM-DD):", style="Unified.TLabel").grid(row=2, column=0, sticky="w", padx=5, pady=5)
+        self.date_entry = ttk.Entry(appt_frame)
+        self.date_entry.grid(row=2, column=1, columnspan=2, sticky="ew", padx=5, pady=5)
 
-        #-- Reason for being seen --
-        ttk.Label(root, text="Reason for being seen:").grid(row=1, column=0, sticky="w")
-        self.diagnosis_entry = ttk.Entry(root)
-        self.diagnosis_entry.grid(row=1, column=1, sticky="ew")
+        ttk.Label(appt_frame, text="Time (HH:MM AM/PM):", style="Unified.TLabel").grid(row=3, column=0, sticky="w", padx=5, pady=5)
+        self.time_entry = ttk.Entry(appt_frame)
+        self.time_entry.grid(row=3, column=1, columnspan=2, sticky="ew", padx=5, pady=5)
 
-        # --- Appointment Time ---
-        ttk.Label(root, text="Time (HH:MM AM/PM):").grid(row=3, column=0, sticky="w")
-        self.time_entry = ttk.Entry(root)
-        self.time_entry.grid(row=3, column=1, sticky="ew")
+        ttk.Button(appt_frame, text="Book Appointment", command=self.book_appointment)\
+            .grid(row=4, column=1, padx=5, pady=10, sticky="e")
 
-        # --- Services List ---
-        ttk.Label(root, text="Add Service:").grid(row=7, column=0, sticky="w")
-        self.service_desc = tk.Text(root, height=4, width=40)
-        self.service_desc.grid(row=7, column=1, sticky="ew")
+        ttk.Button(appt_frame, text="➕ Add Patient", command=self.open_add_patient_window)\
+            .grid(row=4, column=2, padx=5, pady=10, sticky="w")
 
-        # --- Adding Services Cost ---
-        ttk.Label(root, text="Unit Cost:").grid(row=8, column=0, sticky="w")
-        self.unit_cost_entry = ttk.Entry(root)
-        self.unit_cost_entry.grid(row=8, column=1, sticky="ew")
-
-        # --- Quantity Spinbox --- 
-        ttk.Label(root, text="Quantity:").grid(row=9, column=0, sticky="w")
-        self.qty_spin = tk.Spinbox(root, from_=1, to=10, width=5)
-        self.qty_spin.grid(row=9, column=1, sticky="ew")
-
-        ttk.Button(root, text="Add Service", command=self.add_service)\
-            .grid(row=10, column=0, columnspan=2, pady=5)
-
-        # --- Invoice Display ---
-        ttk.Label(root, text="Invoice Total:").grid(row=11, column=0, sticky="w")
-        self.total_var = tk.StringVar(value="0.00")
-        ttk.Label(root, textvariable=self.total_var).grid(row=11, column=1, sticky="w")
+        self.patients_cb.bind("<<ComboboxSelected>>", self.on_patient_selected)
 
         # --- Appointments Treeview ---
-        ttk.Label(root, text="Appointments:").grid(row=5, column=0, sticky="w")
+        ttk.Label(root, text="Appointments:", background="#AEC6CF", font=("Segoe UI", 10, "bold")).grid(row=1, column=0, sticky="w", padx=10)
         self.appt_tree = ttk.Treeview(root, columns=("appt_id", "diagnosis", "time", "date"), show="headings", height=5)
         for col in ("appt_id", "diagnosis", "time", "date"):
             self.appt_tree.heading(col, text=col.capitalize())
             self.appt_tree.column(col, width=100)
-        self.appt_tree.grid(row=6, column=0, columnspan=2, sticky="nsew")
-
-        #-- Invoice Button ---
-        ttk.Button(root, text="Generate Invoice", command=self.generate_invoice)\
-            .grid(row=14, column=0, columnspan=2, pady=5)
-        
-        ttk.Button(root, text="Export Invoice to PDF", command=lambda: export_invoice_pdf(self))\
-            .grid(row=15, column=0, columnspan=2, pady=5)
-        
-        
-        #-- Binding selection for an appointment --
+        self.appt_tree.grid(row=2, column=0, columnspan=3, sticky="nsew", padx=10)
         self.appt_tree.bind("<<TreeviewSelect>>", self.select_appointment)
 
-        #-- Binding to get appointments for selected patient --
-        self.patients_cb.bind("<<ComboboxSelected>>", self.load_appointments_for_patient)
+
+        # --- Services Section ---
+        service_frame = ttk.LabelFrame(root, text="Add Service", style="Unified.TLabelframe")
+        service_frame.grid(row=3, column=0, columnspan=3, sticky="ew", padx=10, pady=10)
+        service_frame.grid_columnconfigure(1, weight=1)
+
+        ttk.Label(service_frame, text="Description:", style="Unified.TLabel").grid(row=0, column=0, sticky="w", padx=5, pady=5)
+        self.service_desc = tk.Text(service_frame, height=3, width=40)
+        self.service_desc.grid(row=0, column=1, sticky="ew", padx=5, pady=5)
+
+        ttk.Label(service_frame, text="Unit Cost:", style="Unified.TLabel").grid(row=1, column=0, sticky="w", padx=5, pady=5)
+        self.unit_cost_entry = ttk.Entry(service_frame)
+        self.unit_cost_entry.grid(row=1, column=1, sticky="ew", padx=5, pady=5)
+
+        ttk.Label(service_frame, text="Quantity:", style="Unified.TLabel").grid(row=2, column=0, sticky="w", padx=5, pady=5)
+        self.qty_spin = tk.Spinbox(service_frame, from_=1, to=10, width=5)
+        self.qty_spin.grid(row=2, column=1, sticky="w", padx=5, pady=5)
+
+        ttk.Button(service_frame, text="Add Service", command=self.add_service)\
+            .grid(row=3, column=0, columnspan=2, pady=10)
+
+        # --- Invoice Section ---
+        invoice_frame = ttk.LabelFrame(root, text="Invoice", style="Unified.TLabelframe")
+        invoice_frame.grid(row=4, column=0, columnspan=3, sticky="ew", padx=10, pady=10)
+        invoice_frame.grid_columnconfigure(1, weight=1)
+
+        ttk.Label(invoice_frame, text="Invoice Total:", style="Unified.TLabel").grid(row=0, column=0, sticky="w", padx=5, pady=5)
+        self.total_var = tk.StringVar(value="0.00")
+        ttk.Label(invoice_frame, textvariable=self.total_var, style="Unified.TLabel").grid(row=0, column=1, sticky="w", padx=5, pady=5)
+
+        ttk.Label(invoice_frame, text="New Diagnosis:", style="Unified.TLabel").grid(row=1, column=0, sticky="w", padx=5, pady=5)
+        self.edit_diag_entry = ttk.Entry(invoice_frame)
+        self.edit_diag_entry.grid(row=1, column=1, sticky="ew", padx=5, pady=5)
+
+        ttk.Button(invoice_frame, text="Update Diagnosis", command=self.update_diagnosis)\
+            .grid(row=2, column=0, columnspan=2, pady=5)
+
+        ttk.Button(invoice_frame, text="Generate Invoice", command=self.generate_invoice)\
+            .grid(row=3, column=0, columnspan=2, pady=5)
+
+        ttk.Button(invoice_frame, text="Export Invoice to PDF", command=lambda: export_invoice_pdf(self))\
+            .grid(row=4, column=0, columnspan=2, pady=5)
+        
+        #--- Invoice Treeview ---
+        self.invoice_tree = ttk.Treeview(invoice_frame, columns=("invoice_id", "appt_id", "amount"), show="headings", height=5)
+        for col in ("invoice_id", "appt_id", "amount"):
+            self.invoice_tree.heading(col, text=col.replace("_", " ").title())
+            self.invoice_tree.column(col, width=100)
+        #self.invoice_tree.bind("<<TreeviewSelect>>", self.select_invoice)
+        
+        self.invoice_tree.grid(row=5, column=0, columnspan=3, sticky="ew", padx=10, pady=5)
 
 
-        #-- Adding a new patient --
-        ttk.Button(root, text="➕ Add Patient", command=self.open_add_patient_window)\
-            .grid(row=0, column=2, padx=5)
 
+    def on_patient_selected(self, event=None):
+        self.load_appointments_for_patient()
+        self.load_invoices_for_patient()
 
-
-
-        # --- Edit Diagnosis Entry ---
-        ttk.Label(root, text="New Diagnosis:").grid(row=12, column=0, sticky="w")
-        self.edit_diag_entry = ttk.Entry(root)
-        self.edit_diag_entry.grid(row=12, column=1, sticky="ew")
-
-        ttk.Button(root, text="Update Diagnosis", command=self.update_diagnosis)\
-            .grid(row=13, column=0, columnspan=2, pady=5)
-
-
-
+    
     def load_patients(self):
         self.cur.execute("SELECT patient_id, first_name, last_name FROM patients")
         rows = self.cur.fetchall()
@@ -136,6 +158,27 @@ class App:
         # Insert new ones
         for row in rows:
             self.appt_tree.insert("", "end", values=(row['appointment_id'], row['diagnosis'], row['time'], row['date']))
+    
+
+    def load_invoices_for_patient(self):
+        patient_name = self.patients_cb.get()
+        if not patient_name:
+            return
+
+        pid = self.patients[patient_name]
+        self.cur.execute("""
+            SELECT i.Invoice_ID, i.Appointment_ID, i.Total_Amount
+            FROM Invoices i
+            JOIN Appointments a ON i.Appointment_ID = a.Appointment_ID
+            WHERE a.Patient_ID = %s
+        """, (pid,))
+        
+        for row in self.invoice_tree.get_children():
+            self.invoice_tree.delete(row)
+        
+        for row in self.cur.fetchall():
+            self.invoice_tree.insert("", "end", values=(row['Invoice_ID'], row['Appointment_ID'], f"${row['Total_Amount']:.2f}"))
+
 
 
     def book_appointment(self):
@@ -231,7 +274,9 @@ class App:
     def generate_invoice(self):
         if not self.current_appointment_id:
             return messagebox.showerror("Error", "Select or create an appointment first.")
+        
 
+        self.update_total()  # Update total before generating invoic
         # Get the total from the stored procedure
         self.cur.callproc('sp_CalcAppointmentCost', (self.current_appointment_id,))
         total = 0.0
@@ -305,5 +350,6 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = App(root)
     root.grid_columnconfigure(1, weight=1)  # Make column 1 expandable
+    root.grid_rowconfigure(6, weight=1)  # Make row 6 expandable
 
     root.mainloop()
