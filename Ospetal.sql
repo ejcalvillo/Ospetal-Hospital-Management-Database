@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS ospetal;
 USE ospetal;
 
 CREATE TABLE IF NOT EXISTS `patients` (
-  `patient_id` mediumint(8) unsigned NOT NULL auto_increment,
+  `patient_id` mediumint unsigned NOT NULL auto_increment,
   `first_name` varchar(255) default NULL,
   `last_name` varchar(255) default NULL,
   `address` varchar(255) default NULL,
@@ -42,7 +42,7 @@ VALUES
 
 -- Department Table (Has Department ID and Name)
 CREATE TABLE IF NOT EXISTS `departments` (
-  `department_id` mediumint(8) unsigned NOT NULL auto_increment,
+  `department_id` mediumint unsigned NOT NULL auto_increment,
   `department_name` varchar(255),
   PRIMARY KEY (`department_id`)
 ) AUTO_INCREMENT=1;
@@ -70,8 +70,8 @@ SELECT * FROM departments;
 
 
 create TABLE IF NOT EXISTS `Employees`(
-  `Employee_ID` mediumint(8) unsigned NOT NULL auto_increment,
-  `Department_ID` mediumint(8) unsigned,
+  `Employee_ID` mediumint unsigned NOT NULL auto_increment,
+  `Department_ID` mediumint unsigned,
   `first_name` varchar(255) default NULL,
   `last_name` varchar(255) default NULL,
   `email` VARCHAR(150) UNIQUE,
@@ -148,22 +148,9 @@ VALUES
 select * FROM Employees;
 
 
-    -- Table for Appointment
-CREATE TABLE IF NOT EXISTS `appointments` (
-  `appointment_id` INT unsigned NOT NULL auto_increment,
-  `employee_id` mediumint(8) unsigned NOT NULL,
-  `patient_id` mediumint(8) unsigned NOT NULL,
-  `diagnosis` varchar(255),
-  `time` varchar(255) NOT NULL,
-  `date` varchar(255) NOT NULL,
-  PRIMARY KEY (`appointment_id`),
-  FOREIGN KEY(`employee_id`) REFERENCES Employees(`employee_id`),
-  FOREIGN KEY(`patient_id`) REFERENCES patients(`patient_id`)
-) AUTO_INCREMENT=10000;
-
 create table Employees_phones(
-`Phone_Number_ID` mediumint(8) unsigned not null AUTO_INCREMENT,
-`Employee_ID` MEDIUMINT(8) unsigned not null,
+`Phone_Number_ID` mediumint unsigned not null AUTO_INCREMENT,
+`Employee_ID` MEDIUMINT unsigned not null,
 `Employee_Phone_number` varchar(20) DEFAULT null,
 primary key(`Phone_Number_ID`),
 foreign key (employee_ID) references employees(employee_ID)
@@ -205,8 +192,8 @@ VALUES
   select *from Employees_Phones;
   
 create table Patients_Phones(
-`Patient_Phone_Number_ID` INT not null AUTO_INCREMENT,
-`Patient_ID` MEDIUMINT(8) UNSIGNED not null,
+`Patient_Phone_Number_ID` MEDIUMINT not null AUTO_INCREMENT,
+`Patient_ID` MEDIUMINT UNSIGNED not null,
 `Patient_Phone_number` varchar(20) DEFAULT null,
 primary key(`Patient_Phone_Number_ID`),
 foreign key (Patient_ID) references patients(patient_id)
@@ -237,16 +224,25 @@ INSERT INTO `Patients_phones` (`Patient_Phone_number_ID`, `Patient_ID`, `Patient
   (22, 22, '210-133-1344'),
   (23, 23, '210-233-9988'),
   (24, 24, '210-333-8956'),
-  (25, 25, '210-445-8933'),
-  (26, 26, '210-236-6987'),
-  (27, 27, '210-393-7894'),
-  (28, 28, '210-454-7894'),
-  (29, 29, '210-894-5456'),
-  (30, 30, '210-856-9900');
+  (25, 25, '210-445-8933');
 
   
   select *from Patients_Phones;
   
+     -- Table for Appointment
+CREATE TABLE IF NOT EXISTS `appointments` (
+  `appointment_id` mediumint unsigned NOT NULL auto_increment,
+  `employee_id` mediumint unsigned NOT NULL,
+  `patient_id` mediumint unsigned NOT NULL,
+  `diagnosis` varchar(255),
+  `time` varchar(255) NOT NULL,
+  `date` varchar(255) NOT NULL,
+  PRIMARY KEY (`appointment_id`),
+  FOREIGN KEY(`employee_id`) REFERENCES Employees(`employee_id`),
+  FOREIGN KEY(`patient_id`) REFERENCES patients(`patient_id`)
+) AUTO_INCREMENT=10000;
+
+
 INSERT INTO `appointments` (`employee_id`, `patient_id`, `diagnosis`, `time`, `date`)
 VALUES
   (101, 12, 'Influenza', '11:23 AM', '07/15/2015'),
@@ -268,7 +264,17 @@ VALUES
   (110, 4, 'Arthritis', '01:45 PM', '08/12/2021'),
   (108, 19, 'Bronchitis', '10:05 AM', '10/10/2020'),
   (121, 2, 'Strep Throat', '02:50 PM', '09/25/2023'),
-  (123, 15, 'Tonsillitis', '11:40 AM', '05/14/2022');
+  (123, 15, 'Tonsillitis', '11:40 AM', '05/14/2022'),
+  (111, 6, 'Vertigo', '09:45 AM', '06/21/2022'),
+  (102, 7, 'Skin Rash', '11:10 AM', '01/30/2021'),
+  (106, 9, 'Allergic Rhinitis', '01:00 PM', '03/10/2023'),
+  (110, 11, 'Chronic Fatigue', '03:20 PM', '07/19/2021'),
+  (122, 16, 'Osteoarthritis', '10:30 AM', '05/12/2022'),
+  (115, 20, 'Anemia', '12:15 PM', '02/22/2023'),
+  (104, 21, 'Gastroenteritis', '02:40 PM', '09/14/2022'),
+  (128, 23, 'Acid Reflux', '04:10 PM', '03/27/2023'),
+  (130, 24, 'Sciatica', '01:30 PM', '11/11/2022'),
+  (114, 25, 'Pneumonia', '09:00 AM', '08/05/2023');
 
 
 SELECT * FROM appointments;
@@ -276,7 +282,7 @@ SELECT * FROM appointments;
 -- Makes the service table --  
 CREATE TABLE `Services` (
     Service_ID INT AUTO_INCREMENT PRIMARY KEY,
-    appointment_ID MEDIUMINT(8) UNSIGNED NOT NULL,
+    appointment_ID MEDIUMINT UNSIGNED NOT NULL,
     Description TEXT,  
     UnitCost DECIMAL(10,2),      
     Quantity INT DEFAULT 1,
@@ -304,18 +310,64 @@ VALUES
   (10016, 'Patient with Arthritis: I recommend a tailored management plan including pain management with NSAIDs, physical therapy, and if needed, referral to a specialist for further evaluation and treatment.', 140.00, 1),
   (10017, 'Patient with Bronchitis: I suggest supportive care with rest, inhaled bronchodilators, and maintaining hydration, with follow-up to ensure resolution of respiratory symptoms.', 95.00, 1),
   (10018, 'Patient with Strep Throat: I recommend prompt administration of antibiotics as per current guidelines along with supportive measures such as hydration and rest to reduce symptom severity.', 70.00, 1),
-  (10019, 'Patient with Tonsillitis: I advise evaluation for recurrent cases and a combination of antibiotic therapy with supportive care. In cases of chronic recurrence, surgical options may be discussed.', 115.00, 1);
+  (10019, 'Patient with Tonsillitis: I advise evaluation for recurrent cases and a combination of antibiotic therapy with supportive care. In cases of chronic recurrence, surgical options may be discussed.', 115.00, 1),
+  (10020, 'Patient with Vertigo: I recommend vestibular rehabilitation therapy and monitoring of symptoms. Evaluate for underlying causes such as inner ear issues.', 95.00, 1),
+  (10021, 'Patient with Skin Rash: I suggest topical corticosteroids and allergen avoidance. If symptoms persist, refer to dermatology.', 60.00, 1),
+  (10022, 'Patient with Allergic Rhinitis: I recommend antihistamines, nasal corticosteroids, and review of environmental allergens.', 70.00, 1),
+  (10023, 'Patient with Chronic Fatigue: Initiate comprehensive evaluation including thyroid and nutritional screening; suggest rest and counseling.', 150.00, 1),
+  (10024, 'Patient with Osteoarthritis: Recommend NSAIDs and physical therapy. Refer to orthopedics if joint degradation is advanced.', 120.00, 1),
+  (10025, 'Patient with Anemia: Suggest iron supplements and dietary adjustments; follow-up labs to monitor hemoglobin and ferritin.', 90.00, 1),
+  (10026, 'Patient with Gastroenteritis: Recommend oral rehydration, rest, and bland diet. Monitor for signs of dehydration.', 65.00, 1),
+  (10027, 'Patient with Acid Reflux: Prescribe proton pump inhibitors and advise dietary modifications. Evaluate for GERD if recurrent.', 75.00, 1),
+  (10028, 'Patient with Sciatica: Suggest pain relief, physical therapy, and postural correction. Refer to neurology if severe.', 100.00, 1),
+  (10029, 'Patient with Pneumonia: Prescribe antibiotics based on severity and patient risk factors. Recommend rest and fluid intake.', 130.00, 1);
   
   SELECT * FROM Services;
 
 CREATE TABLE Invoices (
     Invoice_ID INT AUTO_INCREMENT PRIMARY KEY,
-    Appointment_ID MEDIUMINT(8) UNSIGNED NOT NULL UNIQUE,
+    Appointment_ID MEDIUMINT UNSIGNED NOT NULL UNIQUE,
     Total_Amount DECIMAL(10,2) NOT NULL,
     Status ENUM('Unpaid', 'Paid', 'Pending') DEFAULT 'Unpaid',
     Issued_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (Appointment_ID) REFERENCES appointments(appointment_id)
 );
+
+INSERT INTO Invoices (Appointment_ID, Total_Amount, Status)
+VALUES
+  (10000, 100.00, 'Paid'),
+  (10001, 2000.00, 'Unpaid'),
+  (10002, 150.00, 'Pending'),
+  (10003, 50.00, 'Paid'),
+  (10004, 120.00, 'Unpaid'),
+  (10005, 180.00, 'Pending'),
+  (10006, 75.00, 'Unpaid'),
+  (10007, 500.00, 'Paid'),
+  (10008, 65.00, 'Pending'),
+  (10009, 90.00, 'Unpaid'),
+  (10010, 55.00, 'Paid'),
+  (10011, 200.00, 'Unpaid'),
+  (10012, 80.00, 'Paid'),
+  (10013, 110.00, 'Pending'),
+  (10014, 130.00, 'Unpaid'),
+  (10015, 85.00, 'Unpaid'),
+  (10016, 140.00, 'Paid'),
+  (10017, 95.00, 'Unpaid'),
+  (10018, 70.00, 'Pending'),
+  (10019, 115.00, 'Paid'),
+  (10020, 95.00, 'Unpaid'),
+  (10021, 60.00, 'Paid'),
+  (10022, 70.00, 'Pending'),
+  (10023, 150.00, 'Unpaid'),
+  (10024, 120.00, 'Paid'),
+  (10025, 90.00, 'Unpaid'),
+  (10026, 65.00, 'Pending'),
+  (10027, 75.00, 'Paid'),
+  (10028, 100.00, 'Unpaid'),
+  (10029, 130.00, 'Unpaid');
+
+SELECT COUNT(*) FROM Invoices;
+
 
 -- the patient_notes table to store automatic notes -- 
 CREATE TABLE IF NOT EXISTS patient_log (
