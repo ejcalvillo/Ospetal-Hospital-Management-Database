@@ -11,17 +11,24 @@ This project is intended for educational and development purposes, featuring a f
 | Table        | Description                                                                 |
 |--------------|-----------------------------------------------------------------------------|
 | **patients** | Stores personal information of hospital patients.                           |
-| **departments** | Contains the list of medical departments in the hospital.               |
-| **Employees** | Holds details about hospital staff and the departments they work in.       |
-| **appointments** | Tracks medical appointments between employees and patients.            |
-| **Services** | Logs services provided during appointments, including cost and quantity.    |
+| **patients_phones** | Stores the phone numbers of hospital patients.                       |
+| **departments** | Contains the list of medical departments in the hospital.                |
+| **employees** | Holds details about hospital staff and the departments they work in.       |
+| **employees_phones** | Stores the phone numbers of hospital employees.                     |
+| **appointments** | Tracks medical appointments between employees and patients.             |
+| **services** | Logs services provided during appointments, including cost and quantity.    |
+| **invoices** | Logs the invoices created from every appointment.                           |
 
 ---
 
 ## 🔗 Schema Relationships (ERD Style)
 patients ⟷ appointments ⟷ employees ⟷ departments
 
-appointments ⟷ services
+patients ⟷ patients_phones
+
+employees ⟷ employees_phones
+
+invoices ⟷ appointments ⟷ services
 
 ## ✨ Features
 
