@@ -195,13 +195,16 @@ VALUES
 -- Testing works --
 
 -- This trigger fires after inserting a patient and adds a welcome message to the patient_log -- 
-DELIMITER:
+DELIMITER //
 CREATE TRIGGER after_new_patient
 AFTER INSERT ON patients
 FOR EACH ROW
 BEGIN
-  INSERT INTO patient_notes (patient_id, note_text)
-  VALUES (NEW.patient_id, CONCAT('Welcome ', NEW.first_name, ' ', NEW.last_name, '!'));
+  INSERT INTO patient_log (patient_id, log_message)
+  VALUES (
+    NEW.patient_id,
+    CONCAT('Welcome, ', NEW.first_name, ' ', NEW.last_name, '! Your patient ID is ', NEW.patient_id)
+  );
 END;
 //
 DELIMITER ;
