@@ -33,7 +33,17 @@ CASE
 	ELSE 'Low' 
 END AS salary
 FROM employees;
-
+---Find the department with the highest average salary.
+SELECT
+    department, AVG(salary)
+FROM
+    employees
+GROUP BY
+    department
+HAVING
+    AVG(salary) = (SELECT MAX(AVG(salary))
+                   FROM employees
+                   GROUP BY department)
 -- Write a query that lists what department the employees are assigned to*/
 select E.first_name,E.last_name,D.department_name
 from employees E
