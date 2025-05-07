@@ -317,3 +317,11 @@ CREATE TABLE Invoices (
     FOREIGN KEY (Appointment_ID) REFERENCES appointments(appointment_id)
 );
 
+-- the patient_notes table to store automatic notes -- 
+CREATE TABLE IF NOT EXISTS patient_log (
+  log_id INT AUTO_INCREMENT PRIMARY KEY,
+  patient_id INT,
+  log_message VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
