@@ -194,6 +194,25 @@ VALUES
   (101, 25, 'Duplicate Booking', '10:00 AM', '2025-01-01');
 -- Testing works --
 
+-- This trigger fires after inserting a patient and adds a welcome message to the patient_log -- 
+DELIMITER:
+CREATE TRIGGER after_new_patient
+AFTER INSERT ON patients
+FOR EACH ROW
+BEGIN
+  INSERT INTO patient_notes (patient_id, note_text)
+  VALUES (NEW.patient_id, CONCAT('Welcome ', NEW.first_name, ' ', NEW.last_name, '!'));
+END;
+//
+DELIMITER ;
+
+-- Testing Welcome Trigger -- 
+INSERT INTO patients (first_name, last_name, address, birthdate)
+VALUES ('Sneha', 'Karki', '123 Damak Ln', 'Nov 22, 2003');
+
+-- Check the welcome log
+SELECT * FROM patient_log;
+
 
 
 
