@@ -6,10 +6,11 @@ USE ospetal;
 -- Creating a new patient
 INSERT INTO patients (first_name, last_name, address, birthdate)
 VALUES ('Nina', 'Lopez', '123 Harmony Ln', 'Jan 10, 1995');
+
 -- Creating New Patients_phones--
-  
-  insert into Patients_Phones (`Patient_Phone_Number_ID`, `Patient_ID`, `Patient_Phone_number`)
-  values(26,26,'210-889-5566');
+insert into Patients_Phones (`Patient_Phone_Number_ID`, `Patient_ID`, `Patient_Phone_number`)
+values(26,26,'210-889-5566');
+
 -- Creating a new appointment
 INSERT INTO appointments (employee_id, patient_id, diagnosis, time, date)
 VALUES (101, 26, 'Sprained Ankle', '01:45 PM', '04/20/2025');
@@ -34,6 +35,7 @@ CASE
 	ELSE 'Low' 
 END AS salary
 FROM employees;
+
 -- Find the department with the highest average salary.
 SELECT department_ID, AVG(salary)
 FROM employees
@@ -67,21 +69,30 @@ SELECT
 FROM Employees
 WHERE exit_date IS NULL;
 
--- Query for listing appointments with patient and doctor names --
-  SELECT 
-	  a.appointment_id,
-	  p.first_name AS patient_first_name,
-	  p.last_name AS patient_last_name,
-	  e.first_name AS doctor_first_name,
-	  e.last_name AS doctor_last_name,
-	  a.diagnosis,
-	  a.date,
-	  a.time
+-- View for listing all appointments with patient and doctor names --
+CREATE VIEW PatientAppointmentDetails AS
+SELECT 
+    a.appointment_id,
+    p.patient_id,
+    CONCAT(p.first_name, ' ', p.last_name) AS patient_name,
+    CONCAT(e.first_name, ' ', e.last_name) AS doctor_name,
+    a.diagnosis,
+    a.date,
+    a.time
 FROM appointments AS a
-JOIN patients AS p
-ON a.patient_id = p.patient_id
-JOIN Employees AS e 
-ON a.employee_id = e.employee_id;
+JOIN patients AS p ON a.patient_id = p.patient_id
+JOIN employees AS e ON a.employee_id = e.employee_id;
+
+-- Using view to show all past appointments for patient_id = 12
+SELECT *
+FROM PatientAppointmentDetails
+WHERE patient_id = 12;
+
+-- Using view to show all past appointments for doctor Len Graham
+SELECT *
+FROM PatientAppointmentDetails
+WHERE doctor_name = 'Len Graham'
+ORDER BY date ASC, time ASC;
 
 -- Query for listing all departments and number of employees in each --
 SELECT 
@@ -105,10 +116,6 @@ ON p.patient_id = a.patient_id
 GROUP BY p.patient_id, p.first_name, p.last_name
 HAVING appointment_count > 1
 ORDER BY appointment_count DESC;
-
--- Find the ID, then multiply it by 10
- Select SUM(Phone_Number_ID *10)
-  from Patients_Phones;
   
 /* -----------------------------------------------------------------------------------
   -- UPDATE --
@@ -127,30 +134,35 @@ WHERE Department_ID = 1;
 UPDATE Appointments
 SET diagnosis = 'Hypertension (Updated)'
 WHERE appointment_id = 20017;
--- Update Patients_Phones to a new ID
- update Patients_phones
-  set Phone_number_ID = '1', Patient_ID= '2'
-  where phone_number_ID = 2;
   
-  update Patients_Phones
-  set Patient_Phone_Number='210-555-5584', Patient_ID= '3'
-  where Phone_number_ID=3;
+update Patients_Phones
+set Patient_Phone_Number='210-555-5584', Patient_ID= '3'
+where Patient_Phone_number_ID=3;
+
 /* -----------------------------------------------------------------------------------
   -- DELETE --
   -----------------------------------------------------------------------------------*/
 -- Completely deleting all patient information
+DELETE FROM invoices 
+WHERE appointment_id IN (
+  SELECT appointment_id FROM appointments WHERE patient_id = 12
+);
 DELETE FROM Services WHERE appointment_id IN (
   SELECT appointment_id FROM appointments WHERE patient_id = 12
 );
+DELETE FROM Patients_Phones 
+WHERE Patient_ID = 12;
 DELETE FROM appointments WHERE patient_id = 12;
 DELETE FROM patients WHERE patient_id = 12;
 
 -- DELETE – Query to remove a patient’s appointment -- 
 DELETE FROM Appointments
 WHERE appointment_id = 20017;
--- Delete-query to remove a Paitents number
-DELETE FROM Patients_Phones
-WHERE Patient_Phone_number = '210-856-9900';
+
+-- Delete-query to remove a Patients number
+Delete from Patients_Phones
+where Patient_Phone_number_ID=14;
+
  /* -----------------------------------------------------------------------------------
   -- Query for Stored Procedure Calculating total service cost for an appointment --
   -----------------------------------------------------------------------------------*/
