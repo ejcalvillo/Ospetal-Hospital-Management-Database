@@ -33,7 +33,17 @@ CASE
 	ELSE 'Low' 
 END AS salary
 FROM employees;
-
+---Find the department with the highest average salary.
+SELECT
+    department, AVG(salary)
+FROM
+    employees
+GROUP BY
+    department
+HAVING
+    AVG(salary) = (SELECT MAX(AVG(salary))
+                   FROM employees
+                   GROUP BY department)
 -- Write a query that lists what department the employees are assigned to*/
 select E.first_name,E.last_name,D.department_name
 from employees E
@@ -216,6 +226,14 @@ VALUES ('Sneha', 'Karki', '123 Damak Ln', 'Nov 22, 2003');
 -- Check the welcome log
 SELECT * FROM patient_log;
 
-
+SELECT
+    Patient_Name, 
+    SUM(I.total_amount) AS total_order_amount 
+FROM
+    Invoices.i
+JOIN
+    patients ON patients_id = patient_id
+GROUP BY
+    patients_Name;  -- Group the results by customer name
 
 
