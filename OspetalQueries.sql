@@ -6,9 +6,10 @@ USE ospetal;
 -- Creating a new patient
 INSERT INTO patients (first_name, last_name, address, birthdate)
 VALUES ('Nina', 'Lopez', '123 Harmony Ln', 'Jan 10, 1995');
--- Creating New Patients_phones
-  insert into Patients_Phones (`Phone_number_ID`, `Patient_ID`, `Patient_Phone_number`)
-  values(31,131,'210-889-5566');
+-- Creating New Patients_phones--
+  
+  insert into Patients_Phones (`Patient_Phone_Number_ID`, `Patient_ID`, `Patient_Phone_number`)
+  values(26,26,'210-889-5566');
 -- Creating a new appointment
 INSERT INTO appointments (employee_id, patient_id, diagnosis, time, date)
 VALUES (101, 26, 'Sprained Ankle', '01:45 PM', '04/20/2025');
@@ -33,17 +34,19 @@ CASE
 	ELSE 'Low' 
 END AS salary
 FROM employees;
----Find the department with the highest average salary.
-SELECT
-    department, AVG(salary)
-FROM
-    employees
-GROUP BY
-    department
-HAVING
-    AVG(salary) = (SELECT MAX(AVG(salary))
-                   FROM employees
-                   GROUP BY department)
+-- Find the department with the highest average salary.
+SELECT department_ID, AVG(salary)
+FROM employees
+GROUP BY department_ID
+HAVING AVG(salary) = (
+  SELECT MAX(avg_salary)
+  FROM (
+    SELECT AVG(salary) AS avg_salary
+    FROM employees
+    GROUP BY department_ID
+  ) AS dept_avgs
+);
+
 -- Write a query that lists what department the employees are assigned to*/
 select E.first_name,E.last_name,D.department_name
 from employees E
@@ -146,8 +149,8 @@ DELETE FROM patients WHERE patient_id = 12;
 DELETE FROM Appointments
 WHERE appointment_id = 20017;
 -- Delete-query to remove a Paitents number
-  Delete from Patients_Phones
-  where Paitent_Phone_number='210-856-9900';
+DELETE FROM Patients_Phones
+WHERE Patient_Phone_number = '210-856-9900';
  /* -----------------------------------------------------------------------------------
   -- Query for Stored Procedure Calculating total service cost for an appointment --
   -----------------------------------------------------------------------------------*/
@@ -224,16 +227,18 @@ INSERT INTO patients (first_name, last_name, address, birthdate)
 VALUES ('Sneha', 'Karki', '123 Damak Ln', 'Nov 22, 2003');
 
 -- Check the welcome log
-SELECT * FROM patient_log;
-
 SELECT
-    Patient_Name, 
-    SUM(I.total_amount) AS total_order_amount 
+    CONCAT(p.first_name, ' ', p.last_name) AS patient_name,
+    SUM(I.total_amount) AS total_order_amount
 FROM
-    Invoices.i
+    Invoices I
 JOIN
-    patients ON patients_id = patient_id
+    appointments a ON I.Appointment_ID = a.appointment_id
+JOIN
+    patients p ON a.patient_id = p.patient_id
 GROUP BY
-    patients_Name;  -- Group the results by customer name
+    patient_name;
+
+
 
 
