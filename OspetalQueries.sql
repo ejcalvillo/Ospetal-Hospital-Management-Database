@@ -226,6 +226,14 @@ VALUES ('Sneha', 'Karki', '123 Damak Ln', 'Nov 22, 2003');
 -- Check the welcome log
 SELECT * FROM patient_log;
 
-
+SELECT
+    Patient_Name, 
+    SUM(I.total_amount) AS total_order_amount 
+FROM
+    Invoices.i
+JOIN
+    patients ON patients_id = patient_id
+GROUP BY
+    patients_Name;  -- Group the results by customer name
 
 
